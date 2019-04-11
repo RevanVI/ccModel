@@ -4,11 +4,11 @@
 
 PC::PC(): QObject()
 {
-    intensity = 1;
+    intensity = 1; //in hour
     working = false;
     lastBreakTime = 0;
     taskTimer.setInterval(500);
-    breakTimer.setInterval(1000);
+    breakTimer.setInterval(100);
 
     QObject::connect(&breakTimer, SIGNAL(timeout()), this, SLOT(isBroken()));
     breakTimer.start();
@@ -40,7 +40,7 @@ void PC::changeCheckBreakTime(int interval)
 void PC::isBroken()
 {
     lastBreakTime += breakTimer.interval();
-    double prop = 1 / pow(2.7, intensity * lastBreakTime / 1000); //propability of normal work
+    double prop = 1.0 / pow(2.7, intensity * lastBreakTime / 500.0 / 60); //propability of normal work
 
     std::random_device rd;
     std::mt19937 generator(rd());
