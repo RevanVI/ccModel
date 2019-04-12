@@ -19,6 +19,7 @@ public:
     bool status() const;
     void changeTaskTime(int interval);
     void changeCheckBreakTime(int interval);
+    void genBreakTime();
 signals:
     void broken(double, double);
 
