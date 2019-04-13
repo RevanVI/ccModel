@@ -2,31 +2,26 @@
 
 CalcCentre::CalcCentre(): QObject()
 {
-    count = 0;
-    time = 0;
-    for (int i = 0; i < 1; ++i)
-        QObject::connect(&pcArr[i], SIGNAL(broken(double, double)), this, SLOT(getBreak(double, double)));
+    for (int i = 0; i < pcCount; ++i)
+        pcArr[i].setNum(i);
+    for (int i = 0; i < pcCount; ++i)
+        QObject::connect(&pcArr[i], SIGNAL(broken(int, double)), this, SLOT(getBreak(int, double)));
     QTimer* timer = new QTimer(this);
     timer->setInterval(30000);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(calcMO()));
-
+    QObject::connect(timer, SIGNAL(timeout()), &stat, SLOT(calc()));
+    QObject::connect(&stat, SIGNAL(calculated(double, int, double, int)), this, SLOT(getStat(double, int, double, int)));
     sTime.start();
     timer->start();
 }
 
-void CalcCentre::getBreak(double val1, double val2)
+void CalcCentre::getBreak(int val1, double val2)
 {
-    ++count;
-    time += sTime.elapsed();
+    stat.addData(sTime.elapsed(), 1);
     emit pcBroken(val1, val2);
     sTime.restart();
 }
 
-void CalcCentre::calcMO()
+void CalcCentre::getStat(double allMO, int allCount, double MO, int count)
 {
-    double buf = (time / 500 / 60) / count;
-    emit calculated(count);
-    time = 0;
-    count = 0;
-    sTime.restart();
+    emit resendStat(allMO, allCount, MO, count);
 }

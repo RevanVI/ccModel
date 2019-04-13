@@ -5,8 +5,8 @@ using namespace std;
 
 TApplication::TApplication(int argc, char **argv): QApplication (argc, argv)
 {
-    QObject::connect(&calc, SIGNAL(pcBroken(double, double)), this, SLOT(print(double, double)));
-    QObject::connect(&calc, SIGNAL(calculated(double)), this, SLOT(print(double)));
+    QObject::connect(&calc, SIGNAL(pcBroken(int, double)), this, SLOT(print(int, double)));
+    QObject::connect(&calc, SIGNAL(resendStat(double, int, double, int)), this, SLOT(print(double, int, double, int)));
 }
 
 TApplication::~TApplication()
@@ -14,12 +14,13 @@ TApplication::~TApplication()
 
 }
 
-void TApplication::print(double prop, double number)
+void TApplication::print(int pcNum, double number)
 {
-    cout << "PC broken\tProp: " << prop << "\tNumber: " << number << "\n";
+    cout << "PC " << pcNum << " broken\tInterval: " << number << "\n";
 }
 
-void TApplication::print(double MO)
+void TApplication::print(double allMO, int allCount, double MO, int count)
 {
-    cout << "MO = " << MO << "\n";
+    cout << "MO = " << MO << "\tCount = " << count << "\n";
+    cout << "allMO = " << allMO << "\tallCount = " << allCount << "\n";
 }

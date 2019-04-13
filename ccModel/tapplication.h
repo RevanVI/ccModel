@@ -15,8 +15,8 @@ public:
     ~TApplication();
 
 private slots:
-    void print(double, double);
-    void print(double);
+    void print(int, double);
+    void print(double, int, double, int);
 };
 
 #endif // TAPPLICATION_H

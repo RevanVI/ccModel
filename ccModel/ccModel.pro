@@ -18,7 +18,8 @@ SOURCES += \
         main.cpp \
     tapplication.cpp \
     calccentre.cpp \
-    pc.cpp
+    pc.cpp \
+    statistics.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -28,4 +29,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     tapplication.h \
     calccentre.h \
-    pc.h
+    pc.h \
+    statistics.h

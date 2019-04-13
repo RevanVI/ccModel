@@ -3,23 +3,24 @@
 #include <QTimer>
 #include <QTime>
 #include "pc.h"
+#include "statistics.h"
 
 class CalcCentre: public QObject
 {
     Q_OBJECT
 private:
-    PC pcArr[1];
-    double time;
-    int count;
+    static const int pcCount = 3;
+    PC pcArr[pcCount];
+    Statistics stat;
     QTime sTime;
 public:
     CalcCentre();
 public slots:
-    void getBreak(double, double);
-    void calcMO();
+    void getBreak(int, double);
+    void getStat(double allMO, int allCount, double MO, int count);
 signals:
-    void pcBroken(double, double);
-    void calculated(double);
+    void pcBroken(int, double);
+    void resendStat(double, int, double, int);
 };
 
 #endif // CALCCENTRE_H

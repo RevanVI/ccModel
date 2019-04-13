@@ -7,26 +7,25 @@ class PC: public QObject
 {
     Q_OBJECT
 private:
+    int pcNum;
     int intensity;
     bool working;
     int lastBreakTime; //time from last break in miliseconds;
     QTimer taskTimer;
     QTimer breakTimer;
 public:
-    PC();
+    PC(int num = 0);
 
     bool setTask();
+    void setNum(int num);
     bool status() const;
     void changeTaskTime(int interval);
     void changeCheckBreakTime(int interval);
     void genBreakTime();
 signals:
-    void broken(double, double);
-
+    void broken(int, double);
 private slots:
     void isBroken();
-
-
 };
 
 #endif // PC_H
