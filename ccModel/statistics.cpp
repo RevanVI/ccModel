@@ -1,6 +1,6 @@
 #include "statistics.h"
 
-Statistics::Statistics(): QObject()
+Statistics::Statistics(int pcCount): QObject()
 {
     time = 0; 
     count = 0;
@@ -12,6 +12,10 @@ Statistics::Statistics(): QObject()
 
     allAvTime = 0;
     allAvCount = 0;
+
+    taskCanceled = 0;
+    taskCanceledPC = new int[pcCount];
+    taskDonePC = new int[pcCount];
 }
 
 void Statistics::addData(double t, int c)
@@ -32,4 +36,14 @@ void Statistics::calc()
     emit calculated(allAvTime, allCount, allAvCount, avTime, count);
     time = 0;
     count = 0;
+}
+
+void Statistics::receiveTaskInfo(int pcNum, int count)
+{
+    if (pcNum == -1)
+        taskCanceled += abs(count);
+    else if (count > 0)
+        taskDonePC[pcNum] += count;
+    else
+        taskCanceledPC[pcNum] += -count;
 }

@@ -9,15 +9,15 @@ class TaskGenerator: public QObject
     Q_OBJECT
 private:
     int intensity;
+    int avTime;
     QTimer taskTimer;
 public:
     TaskGenerator();
 
     void genTaskTime();
-    void setIntensity();
-
+    void setIntensity(int inten);
 signals:
-    void taskGenerated();
+    void taskGenerated(int);
 
 public slots:
     void genTask();

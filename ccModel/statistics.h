@@ -17,12 +17,17 @@ private:
 
     double allAvTime;
     double allAvCount;
+
+    int* taskDonePC;
+    int* taskCanceledPC;
+    int taskCanceled;
 public:
-    Statistics();
+    Statistics(const int pcCount = 0);
 
     void addData(double t, int c);
 public slots:
     void calc();
+    void receiveTaskInfo(int, int);
 signals:
     void calculated(double, int, double, double, int);
 };

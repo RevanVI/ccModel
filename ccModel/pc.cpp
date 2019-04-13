@@ -11,21 +11,29 @@ PC::PC(int num): QObject()
     taskTimer.setInterval(500);
 
     QObject::connect(&breakTimer, SIGNAL(timeout()), this, SLOT(isBroken()));
+    QObject::connect(&taskTimer, SIGNAL(timeout()), this, SLOT(sendDoneTask()));
     genBreakTime();
     breakTimer.start();
 }
 
-bool PC::setTask()
+bool PC::setTask(int time)
 {
     if (working)
         return false;
+    taskTimer.setInterval(time);
     working = true;
+    taskTimer.start();
     return true;
 }
 
 void PC::setNum(int num)
 {
     pcNum = num;
+}
+
+void PC::setIntensity(int inten)
+{
+    intensity = inten;
 }
 
 bool PC::status() const
@@ -55,7 +63,19 @@ void PC::genBreakTime()
 void PC::isBroken()
 {
     lastBreakTime = 0;
-    working = false;
-    emit broken(pcNum, breakTimer.interval() / 500); //time in minutes
+    if (working)
+    {
+        taskTimer.stop();
+        working = false;
+        emit taskEnded(pcNum, -1);
+    }
+    emit broken(pcNum, breakTimer.interval() / 500.0); //time in minutes
     genBreakTime();
+}
+
+void PC::sendDoneTask()
+{
+    working = false;
+    taskTimer.stop();
+    emit taskEnded(pcNum, +1);
 }
