@@ -19,7 +19,8 @@ SOURCES += \
     tapplication.cpp \
     calccentre.cpp \
     pc.cpp \
-    statistics.cpp
+    statistics.cpp \
+    taskgenerator.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -30,4 +31,5 @@ HEADERS += \
     tapplication.h \
     calccentre.h \
     pc.h \
-    statistics.h
+    statistics.h \
+    taskgenerator.h

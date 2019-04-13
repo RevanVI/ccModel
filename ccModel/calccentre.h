@@ -17,10 +17,10 @@ public:
     CalcCentre();
 public slots:
     void getBreak(int, double);
-    void getStat(double allMO, int allCount, double MO, int count);
+    void getStat(double allAvTime, int allCount, double allAvCount, double avTime, int count);
 signals:
     void pcBroken(int, double);
-    void resendStat(double, int, double, int);
+    void resendStat(double, int, double, double, int);
 };
 
 #endif // CALCCENTRE_H

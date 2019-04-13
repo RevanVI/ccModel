@@ -16,7 +16,7 @@ public:
 
 private slots:
     void print(int, double);
-    void print(double, int, double, int);
+    void print(double, int, double, double, int);
 };
 
 #endif // TAPPLICATION_H

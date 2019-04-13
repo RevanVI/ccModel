@@ -56,6 +56,6 @@ void PC::isBroken()
 {
     lastBreakTime = 0;
     working = false;
-    emit broken(pcNum, breakTimer.interval());
+    emit broken(pcNum, breakTimer.interval() / 500); //time in minutes
     genBreakTime();
 }

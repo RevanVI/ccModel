@@ -9,10 +9,14 @@ class Statistics: public QObject
 private:
     double time;
     int count;
-    double MO;
-    double allMO;
+    double avTime;
+
     double allTime;
     int allCount;
+    int cycleCount;
+
+    double allAvTime;
+    double allAvCount;
 public:
     Statistics();
 
@@ -20,7 +24,7 @@ public:
 public slots:
     void calc();
 signals:
-    void calculated(double, int, double, int);
+    void calculated(double, int, double, double, int);
 };
 
 #endif // STATISTICS_H
