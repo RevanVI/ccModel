@@ -16,6 +16,7 @@ public:
 
     void genTaskTime();
     void setIntensity(int inten);
+    void setAvTime(int time);
 signals:
     void taskGenerated(int);
 

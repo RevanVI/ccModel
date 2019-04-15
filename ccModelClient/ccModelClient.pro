@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,15 +26,15 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        widget.cpp \
-    tapplication.cpp
+    tapplication.cpp \
+    tinterface.cpp
 
 HEADERS += \
-        widget.h \
-    tapplication.h
+    tapplication.h \
+    tinterface.h
 
 FORMS += \
-        widget.ui
+    tinterface.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

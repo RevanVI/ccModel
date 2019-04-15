@@ -33,3 +33,8 @@ void TaskGenerator::setIntensity(int inten)
 {
     intensity = inten;
 }
+
+void TaskGenerator::setAvTime(int time)
+{
+    avTime = time;
+}

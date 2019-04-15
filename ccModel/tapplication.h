@@ -1,6 +1,9 @@
 #ifndef TAPPLICATION_H
 #define TAPPLICATION_H
 #include <QtWidgets/QApplication>
+#include <QtNetwork/QUdpSocket>
+#include <QDataStream>
+#include <QBitArray>
 #include "calccentre.h"
 #include "taskgenerator.h"
 
@@ -12,6 +15,7 @@ class TApplication: public QApplication
 private:
     CalcCentre calc;
     TaskGenerator taskGen;
+    QUdpSocket socket;
 public:
     TApplication(int argc, char **argv);
     ~TApplication();
@@ -22,6 +26,7 @@ private slots:
     void printTaskInfo(int, int);
     void printTaskInfo(int);
     void printTaskConnection(int);
+    void receiveData();
 };
 
 #endif // TAPPLICATION_H

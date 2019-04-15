@@ -1,8 +1,10 @@
 #ifndef TAPPLICATION_H
 #define TAPPLICATION_H
 #include <QtWidgets/QApplication>
-#include "calccentre.h"
-#include "taskgenerator.h"
+#include <QtNetwork/QUdpSocket>
+#include <QDataStream>
+#include <QBitArray>
+#include "tinterface.h"
 
 using namespace std;
 
@@ -10,18 +12,14 @@ class TApplication: public QApplication
 {
     Q_OBJECT
 private:
-    CalcCentre calc;
-    TaskGenerator taskGen;
+    TInterface interface;
 public:
     TApplication(int argc, char **argv);
     ~TApplication();
-
+    QUdpSocket socket;
 private slots:
-    void print(int, double);
-    void print(double, int, double, double, int);
-    void printTaskInfo(int, int);
-    void printTaskInfo(int);
-    void printTaskConnection(int);
+    void sendData();
+    void receiveData();
 };
 
 #endif // TAPPLICATION_H
