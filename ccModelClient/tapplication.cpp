@@ -8,10 +8,7 @@ TApplication::TApplication(int argc, char **argv): QApplication (argc, argv)
     interface.show();
     socket.bind(22022);
     QObject::connect(&socket, SIGNAL(readyRead()), this, SLOT(receiveData()));
-    QObject::connect(&interface, SIGNAL(setBtnClicked()), this, SLOT(sendData()));
-    QObject::connect(&interface, SIGNAL(startBtnClicked()), this, SLOT(sendData()));
-    QObject::connect(&interface, SIGNAL(pauseBtnClicked()), this, SLOT(sendData()));
-    QObject::connect(&interface, SIGNAL(stopBtnClicked()), this, SLOT(sendData()));
+    QObject::connect(&interface, SIGNAL(btnClicked(int)), this, SLOT(sendData(int)));
 }
 
 TApplication::~TApplication()
@@ -19,18 +16,21 @@ TApplication::~TApplication()
 
 }
 
-void TApplication::sendData()
+void TApplication::sendData(int btnNum)
 {
-    int operation = 0;
-    int* intData = interface.getData();
+
     QByteArray data;
     QDataStream str(&data, QIODevice::WriteOnly);
     str.setVersion(QDataStream::Qt_5_9);
-    str << operation;
-    for (int i = 0; i < 3; ++i)
-        str << intData[i];
+    str << btnNum;
+    if (btnNum == 0)
+    {
+        int* intData = interface.getData();
+        for (int i = 0; i < 3; ++i)
+            str << intData[i];
+        delete[] intData;
+    }
     int bytes = socket.writeDatagram(data, QHostAddress::LocalHost, 6374);
-    delete[] intData;
 }
 
 void TApplication::receiveData()
@@ -74,9 +74,18 @@ void TApplication::receiveData()
             }
             str >> taskCanceled;
         }
+        else if (operation == 10)
+           for (int i = 0; i < 2; ++i)
+           {
+               int buf;
+               str >> buf;
+               taskDonePC.push_back(buf);
+           }
         data->clear();
         delete data;
     }
     if (operation == 0)
         interface.setStatData(averData, taskDonePC, taskCanceledPC, taskCanceled);
+    if (operation == 10)
+            interface.setStatus(taskDonePC);
 }

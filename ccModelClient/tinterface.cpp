@@ -25,22 +25,22 @@ int* TInterface::getData()
 
 void TInterface::on_setBtn_clicked()
 {
-    emit setBtnClicked();
+    emit btnClicked(0);
 }
 
 void TInterface::on_startBtn_clicked()
 {
-    emit startBtnClicked();
-}
-
-void TInterface::on_stopBtn_clicked()
-{
-    emit stopBtnClicked();
+    emit btnClicked(1);
 }
 
 void TInterface::on_pauseBtn_clicked()
 {
-    emit pauseBtnClicked();
+    emit btnClicked(2);
+}
+
+void TInterface::on_stopBtn_clicked()
+{
+    emit btnClicked(3);
 }
 
 void TInterface::setStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled)

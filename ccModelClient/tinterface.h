@@ -24,11 +24,9 @@ public:
     int* getData();
 public slots:
     void setStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled);
+    void setStatus(QVector<int> data);
 signals:
-    void setBtnClicked();
-    void startBtnClicked();
-    void pauseBtnClicked();
-    void stopBtnClicked();
+    void btnClicked(int btnNum);
 };
 
 #endif // WIDGET_H

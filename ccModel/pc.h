@@ -25,6 +25,10 @@ public:
     void changeTaskTime(int interval);
     void changeCheckBreakTime(int interval);
     void genBreakTime();
+
+    void start();
+    void pause();
+    void stop();
 signals:
     void broken(int pcNum, double time);
     void taskEnded(int pcNum, int taskStatus);

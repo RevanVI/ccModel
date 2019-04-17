@@ -39,7 +39,7 @@ void Statistics::calc()
     allTime += time;
     averData[0] =(allTime / 60) / allCount;
     averData[1] = double(allCount) / cycleCount;
-
+    emit sendLogData(averData);
     emit sendData(averData, taskDonePC, taskCanceledPC, taskCanceled);
     time = 0;
     count = 0;

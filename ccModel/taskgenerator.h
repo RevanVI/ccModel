@@ -13,15 +13,16 @@ private:
     QTimer taskTimer;
     double timeMult;
 
-    void pause();
-    void start();
-    void stop();
+
 public:
     TaskGenerator(double timeM = 500);
 
     void genTaskTime();
     void setIntensity(int inten);
     void setAvTime(int time);
+    void pause();
+    void start();
+    void stop();
 signals:
     void taskGenerated(double time);
 

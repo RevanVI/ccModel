@@ -11,7 +11,7 @@ TApplication::TApplication(int argc, char **argv): QApplication (argc, argv)
 
     //print block
     QObject::connect(&calc, SIGNAL(pcBroken(int, double)), this, SLOT(printBreakInfo(int, double)));
-    QObject::connect(&calc, SIGNAL(resendStat(QVector<double>, QVector<int>, QVector<int>, int)), this, SLOT(print(QVector<double>, QVector<int>, QVector<int>, int)));
+    QObject::connect(&calc, SIGNAL(resendLogStat(QVector<double>)), this, SLOT(printLogStat(QVector<double>)));
     QObject::connect(&calc, SIGNAL(taskEnded(int, int)), this, SLOT(printEndTaskInfo(int, int)));
     QObject::connect(&calc, SIGNAL(taskConnected(int)), this, SLOT(printTaskConnection(int)));
     QObject::connect(&taskGen, SIGNAL(taskGenerated(double)), this, SLOT(printGenTaskInfo(double)));
@@ -31,7 +31,7 @@ void TApplication::printBreakInfo(int pcNum, double time)
     cout << QTime::currentTime().toString().toStdString() << " PC " << pcNum + 1 << " broken\tTime since last failure: " << time << "\n";
 }
 
-void TApplication::print(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled)
+void TApplication::printLogStat(QVector<double> averData)
 {
     cout << QTime::currentTime().toString().toStdString() << " allAvTime = " << averData[0] << "\tAvCount = " << averData[1] << "\n";
 }
@@ -110,7 +110,7 @@ void TApplication::sendStatData(QVector<double> averData, QVector<int> taskDoneP
 
 void TApplication::sendStatus(int pcNum, int status)
 {
-    int operation = 1;
+    int operation = 10;
     QByteArray data;
     QDataStream str(&data, QIODevice::WriteOnly);
     str.setVersion(QDataStream::Qt_5_9);
@@ -118,18 +118,20 @@ void TApplication::sendStatus(int pcNum, int status)
     int bytes = socket.writeDatagram(data, QHostAddress::LocalHost, 22022);
 }
 
-
 void TApplication::processPause()
 {
-
+    taskGen.pause();
+    calc.pause();
 }
 
 void TApplication::processStart()
 {
-
+    taskGen.start();
+    calc.start();
 }
 
 void TApplication::processStop()
 {
-
+    taskGen.stop();
+    calc.stop();
 }

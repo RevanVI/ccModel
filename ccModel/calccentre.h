@@ -14,18 +14,26 @@ private:
     Statistics* stat;
     QTime sTime;
     double timeMult = 500;
+    QTimer cycleTimer;
+    int addTime;
 public:
     CalcCentre();
     void setPCbreakIntensity(int inten);
+
+    void start();
+    void pause();
+    void stop();
 public slots:
     void getBreak(int pcNum, double time);
     void getStat(QVector<double>, QVector<int>, QVector<int>, int);
+    void getLogStat(QVector<double> averData);
     void getTask(double time);//
     void getEndedTask(int pcNum, int taskStatus);
     void getStatus(int pcNum, int status);
 signals:
     void pcBroken(int pcNum, double time);
     void resendStat(QVector<double>, QVector<int>, QVector<int>, int);
+    void resendLogStat(QVector<double> averData);
     void taskEnded(int pcNum, int taskStatus);
     void taskConnected(int pcNum);
     void resendStatus(int pcNum, int status);

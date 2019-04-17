@@ -32,6 +32,7 @@ public slots:
 signals:
     void sendDataMain(QVector<int>, double);
     void sendData(QVector<double>, QVector<int>, QVector<int>, int);
+    void sendLogData(QVector<double>);
 };
 
 #endif // STATISTICS_H

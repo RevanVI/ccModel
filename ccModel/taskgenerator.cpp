@@ -8,7 +8,6 @@ TaskGenerator::TaskGenerator(double timeM): QObject()
     timeMult = timeM;
     genTaskTime();
     QObject::connect(&taskTimer, SIGNAL(timeout()), this, SLOT(genTask()));
-    taskTimer.start();
 }
 
 void TaskGenerator::genTaskTime()
@@ -42,7 +41,16 @@ void TaskGenerator::setAvTime(int time)
 
 void TaskGenerator::pause()
 {
-    taskTimer.
+    taskTimer.stop();
 }
-void start();
-void stop();
+
+void TaskGenerator::start()
+{
+    taskTimer.start();
+}
+
+void TaskGenerator::stop()
+{
+    taskTimer.stop();
+    genTaskTime();
+}

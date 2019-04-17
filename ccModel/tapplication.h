@@ -24,7 +24,7 @@ public:
     void processStop();
 private slots:
     void printBreakInfo(int pcNum, double time);
-    void print(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled);
+    void printLogStat(QVector<double> averData);
     void printEndTaskInfo(int pcNum, int status); // pcNum - num of PC or -1 if all PCs working, status (+1/-1)
     void printGenTaskInfo(double time);
     void printTaskConnection(int pcNum);

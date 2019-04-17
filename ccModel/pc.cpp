@@ -8,13 +8,12 @@ PC::PC(int num, double timeM): QObject()
     intensity = 3; //in hour
     working = false;
     lastBreakTime = 0;
-    taskTimer.setInterval(500);
+    taskTimer.setInterval(0);
     timeMult = timeM;
 
     QObject::connect(&breakTimer, SIGNAL(timeout()), this, SLOT(isBroken()));
     QObject::connect(&taskTimer, SIGNAL(timeout()), this, SLOT(sendDoneTask()));
     genBreakTime();
-    breakTimer.start();
 }
 
 bool PC::setTask(int time)
@@ -88,4 +87,25 @@ void PC::sendDoneTask()
     taskTimer.stop();
     emit taskEnded(pcNum, +1);
     emit sendStatus(pcNum, 0);
+}
+
+void PC::start()
+{
+    if (taskTimer.interval() != 0)
+        taskTimer.start();
+    breakTimer.start();
+}
+
+void PC::pause()
+{
+    taskTimer.stop();
+    breakTimer.stop();
+}
+
+void PC::stop()
+{
+    taskTimer.stop();
+    taskTimer.setInterval(0);
+    breakTimer.stop();
+    genBreakTime();
 }

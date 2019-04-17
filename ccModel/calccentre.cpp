@@ -11,13 +11,12 @@ CalcCentre::CalcCentre(): QObject()
         QObject::connect(&pcArr[i], SIGNAL(taskEnded(int, int)), this, SLOT(getEndedTask(int, int)));
         QObject::connect(&pcArr[i], SIGNAL(sendStatus(int, int)), this, SLOT(getStatus(int, int)));
     }
-    QTimer* timer = new QTimer(this);
-    timer->setInterval(30000);
-    QObject::connect(timer, SIGNAL(timeout()), stat, SLOT(calc()));
+    cycleTimer.setInterval(30000);
+    addTime = 0;
+    QObject::connect(&cycleTimer, SIGNAL(timeout()), stat, SLOT(calc()));
     QObject::connect(stat, SIGNAL(sendData(QVector<double>, QVector<int>, QVector<int>, int)), this, SLOT(getStat(QVector<double>, QVector<int>, QVector<int>, int)));
+    QObject::connect(stat, SIGNAL(sendLogData(QVector<double>)), this, SLOT(getLogStat(QVector<double>)));
     QObject::connect(this, SIGNAL(taskEnded(int, int)), stat, SLOT(receiveTaskInfo(int, int)));
-    sTime.start();
-    timer->start();
 }
 
 void CalcCentre::setPCbreakIntensity(int inten)
@@ -28,7 +27,8 @@ void CalcCentre::setPCbreakIntensity(int inten)
 
 void CalcCentre::getBreak(int pcNum, double breakTime)
 {
-    stat->addData(sTime.elapsed() / timeMult, 1); //time in minutes
+    stat->addData((sTime.elapsed() + addTime) / timeMult, 1); //time in minutes
+    addTime = 0;
     emit pcBroken(pcNum, breakTime);
     sTime.restart();
 }
@@ -36,6 +36,11 @@ void CalcCentre::getBreak(int pcNum, double breakTime)
 void CalcCentre::getStat(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled)
 {
     emit resendStat(averData, taskDonePC, taskCanceledPC, taskCanceled);
+}
+
+void CalcCentre::getLogStat(QVector<double> averData)
+{
+    emit resendLogStat(averData);
 }
 
 void CalcCentre::getTask(double time)
@@ -62,3 +67,26 @@ void CalcCentre::getStatus(int pcNum, int status)
     emit resendStatus(pcNum, status);
 }
 
+void CalcCentre::start()
+{
+    sTime.start();
+    cycleTimer.start();
+    for (int i = 0; i < pcCount; ++i)
+        pcArr[i].start();
+}
+
+void CalcCentre::pause()
+{
+    addTime = sTime.elapsed();
+    cycleTimer.stop();
+    for (int i = 0; i < pcCount; ++i)
+        pcArr[i].pause();
+}
+
+void CalcCentre::stop()
+{
+    cycleTimer.stop();
+    cycleTimer.setInterval(30000);
+    for (int i = 0; i < pcCount; ++i)
+        pcArr[i].stop();
+}

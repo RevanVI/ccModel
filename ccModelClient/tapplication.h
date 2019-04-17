@@ -18,7 +18,7 @@ public:
     ~TApplication();
     QUdpSocket socket;
 private slots:
-    void sendData();
+    void sendData(int btnNum);
     void receiveData();
 };
 
