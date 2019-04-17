@@ -19,14 +19,18 @@ private:
 public:
     TApplication(int argc, char **argv);
     ~TApplication();
-
+    void processPause();
+    void processStart();
+    void processStop();
 private slots:
-    void print(int, double);
-    void print(double, int, double, double, int);
-    void printTaskInfo(int, int);
-    void printTaskInfo(int);
-    void printTaskConnection(int);
+    void printBreakInfo(int pcNum, double time);
+    void print(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled);
+    void printEndTaskInfo(int pcNum, int status); // pcNum - num of PC or -1 if all PCs working, status (+1/-1)
+    void printGenTaskInfo(double time);
+    void printTaskConnection(int pcNum);
     void receiveData();
+    void sendStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled);
+    void sendStatus(int pcNum, int status);
 };
 
 #endif // TAPPLICATION_H

@@ -23,7 +23,7 @@ public:
 
     int* getData();
 public slots:
-    void setStatData(int* taskCount, double avTime);
+    void setStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled);
 signals:
     void setBtnClicked();
     void startBtnClicked();

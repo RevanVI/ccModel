@@ -11,14 +11,19 @@ private:
     int intensity;
     int avTime;
     QTimer taskTimer;
+    double timeMult;
+
+    void pause();
+    void start();
+    void stop();
 public:
-    TaskGenerator();
+    TaskGenerator(double timeM = 500);
 
     void genTaskTime();
     void setIntensity(int inten);
     void setAvTime(int time);
 signals:
-    void taskGenerated(int);
+    void taskGenerated(double time);
 
 public slots:
     void genTask();

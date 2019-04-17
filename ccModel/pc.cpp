@@ -2,13 +2,14 @@
 #include <cmath>
 #include <random>
 
-PC::PC(int num): QObject()
+PC::PC(int num, double timeM): QObject()
 {
     pcNum = num;
     intensity = 3; //in hour
     working = false;
     lastBreakTime = 0;
     taskTimer.setInterval(500);
+    timeMult = timeM;
 
     QObject::connect(&breakTimer, SIGNAL(timeout()), this, SLOT(isBroken()));
     QObject::connect(&taskTimer, SIGNAL(timeout()), this, SLOT(sendDoneTask()));
@@ -23,6 +24,7 @@ bool PC::setTask(int time)
     taskTimer.setInterval(time);
     working = true;
     taskTimer.start();
+    emit sendStatus(pcNum, 1);
     return true;
 }
 
@@ -34,6 +36,11 @@ void PC::setNum(int num)
 void PC::setIntensity(int inten)
 {
     intensity = inten;
+}
+
+void PC::setTimeMultiflier(double time)
+{
+    timeMult = time;
 }
 
 bool PC::status() const
@@ -57,7 +64,7 @@ void PC::genBreakTime()
     std::mt19937 generator(rd());
     std::uniform_real_distribution<double> distribution(0.0,1.0);
     double number = distribution(generator);
-    breakTimer.setInterval(-log(number)/intensity * 500 * 60); //in miliseconds
+    breakTimer.setInterval(-log(number)/intensity * timeMult * 60); //in miliseconds
 }
 
 void PC::isBroken()
@@ -68,8 +75,10 @@ void PC::isBroken()
         taskTimer.stop();
         working = false;
         emit taskEnded(pcNum, -1);
+        emit sendStatus(pcNum, -1);
+        //something here?
     }
-    emit broken(pcNum, breakTimer.interval() / 500.0); //time in minutes
+    emit broken(pcNum, breakTimer.interval() / timeMult); //time in minutes
     genBreakTime();
 }
 
@@ -78,4 +87,5 @@ void PC::sendDoneTask()
     working = false;
     taskTimer.stop();
     emit taskEnded(pcNum, +1);
+    emit sendStatus(pcNum, 0);
 }

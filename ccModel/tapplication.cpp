@@ -5,15 +5,20 @@ using namespace std;
 
 TApplication::TApplication(int argc, char **argv): QApplication (argc, argv)
 {
-    socket.bind(6374);
+    socket.bind(QHostAddress::LocalHost, 6374);
     QObject::connect(&socket, SIGNAL(readyRead()), this, SLOT(receiveData()));
+    QObject::connect(&taskGen, SIGNAL(taskGenerated(double)), &calc, SLOT(getTask(double)));
 
-    QObject::connect(&calc, SIGNAL(pcBroken(int, double)), this, SLOT(print(int, double)));
-    QObject::connect(&calc, SIGNAL(resendStat(double, int, double, double, int)), this, SLOT(print(double, int, double, double, int)));
-    QObject::connect(&taskGen, SIGNAL(taskGenerated(int)), &calc, SLOT(getTask(int)));
-    QObject::connect(&taskGen, SIGNAL(taskGenerated(int)), this, SLOT(printTaskInfo(int)));
-    QObject::connect(&calc, SIGNAL(taskEnded(int, int)), this, SLOT(printTaskInfo(int, int)));
+    //print block
+    QObject::connect(&calc, SIGNAL(pcBroken(int, double)), this, SLOT(printBreakInfo(int, double)));
+    QObject::connect(&calc, SIGNAL(resendStat(QVector<double>, QVector<int>, QVector<int>, int)), this, SLOT(print(QVector<double>, QVector<int>, QVector<int>, int)));
+    QObject::connect(&calc, SIGNAL(taskEnded(int, int)), this, SLOT(printEndTaskInfo(int, int)));
     QObject::connect(&calc, SIGNAL(taskConnected(int)), this, SLOT(printTaskConnection(int)));
+    QObject::connect(&taskGen, SIGNAL(taskGenerated(double)), this, SLOT(printGenTaskInfo(double)));
+
+    //send block
+    QObject::connect(&calc, SIGNAL(resendStat(QVector<double>, QVector<int>, QVector<int>, int)), this, SLOT(sendStatData(QVector<double>, QVector<int>, QVector<int>, int)));
+    //QObject::connect(&calc, SIGNAL(resendStatus(int, int)), this, SLOT(sendStatus(int, int)));
 }
 
 TApplication::~TApplication()
@@ -21,31 +26,30 @@ TApplication::~TApplication()
 
 }
 
-void TApplication::print(int pcNum, double number)
+void TApplication::printBreakInfo(int pcNum, double time)
 {
-    cout << QTime::currentTime().toString().toStdString() << " PC " << pcNum + 1 << " broken\tTime since last failure: " << number << "\n";
+    cout << QTime::currentTime().toString().toStdString() << " PC " << pcNum + 1 << " broken\tTime since last failure: " << time << "\n";
 }
 
-void TApplication::print(double allAvTime, int allCount, double allAvCount, double avTime, int count)
+void TApplication::print(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled)
 {
-    cout << QTime::currentTime().toString().toStdString() << " MO = " << avTime << "\tCount = " << count << "\n";
-    cout << "allMO = " << allAvTime << "\tallCount = " << allCount << "\tAvCount = " << allAvCount << "\n";
+    cout << QTime::currentTime().toString().toStdString() << " allAvTime = " << averData[0] << "\tAvCount = " << averData[1] << "\n";
 }
 
-void TApplication::printTaskInfo(int pcNum, int count)
+void TApplication::printEndTaskInfo(int pcNum, int status)
 {
     cout << QTime::currentTime().toString().toStdString();
     if (pcNum == -1)
         cout << " Task didn't received\n";
-    else if (count > 0)
+    else if (status > 0)
         cout << " PC " << pcNum + 1 << " done task\n";
     else
         cout << " PC " << pcNum + 1 << " hadn't done task\n";
 }
 
-void TApplication::printTaskInfo(int time)
+void TApplication::printGenTaskInfo(double time)
 {
-    cout << QTime::currentTime().toString().toStdString() << " Task generated with time = " << time / 500.0 << endl;
+    cout << QTime::currentTime().toString().toStdString() << " Task generated with time = " << time << endl;
 }
 
 void TApplication::printTaskConnection(int pcNum)
@@ -55,7 +59,7 @@ void TApplication::printTaskConnection(int pcNum)
 
 void TApplication::receiveData()
 {
-    QBitArray arr(4, false);
+    int operation = -1;
     int recData[3];
     while (socket.hasPendingDatagrams())
     {
@@ -65,17 +69,67 @@ void TApplication::receiveData()
 
         QDataStream str(data, QIODevice::ReadOnly);
         str.setVersion(QDataStream::Qt_5_9);
-        str >> arr;
-        for (int i = 0; i < 3; ++i)
-            str >> recData[i];
+        str >> operation;
+        if (operation == 0)
+            for (int i = 0; i < 3; ++i)
+                str >> recData[i];
         data->clear();
         delete data;
     }
-    if (arr[0] == true)
+    if (operation == 0)
     {
         taskGen.setIntensity(recData[0]);
         taskGen.setAvTime(recData[1]);
         calc.setPCbreakIntensity(recData[2]);
         cout << "\nGet new values\n\n";
     }
+    else if (operation == 1)
+        processStart();
+    else if (operation == 2)
+        processPause();
+    else
+        processStop();
+}
+
+void TApplication::sendStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled)
+{
+    int operation = 0;
+    QByteArray data;
+    QDataStream str(&data, QIODevice::WriteOnly);
+    str.setVersion(QDataStream::Qt_5_9);
+    str << operation;
+    for (int i = 0; i < averData.size(); ++i)
+        str << averData[i];
+    for (int i = 0; i < taskDonePC.size(); ++i)
+        str << taskDonePC[i];
+    for (int i = 0; i < taskCanceledPC.size(); ++i)
+        str << taskCanceledPC[i];
+    str << taskCanceled;
+    int bytes = socket.writeDatagram(data, QHostAddress::LocalHost, 22022);
+}
+
+void TApplication::sendStatus(int pcNum, int status)
+{
+    int operation = 1;
+    QByteArray data;
+    QDataStream str(&data, QIODevice::WriteOnly);
+    str.setVersion(QDataStream::Qt_5_9);
+    str << operation << pcNum << status;
+    int bytes = socket.writeDatagram(data, QHostAddress::LocalHost, 22022);
+}
+
+
+void TApplication::processPause()
+{
+
+}
+
+void TApplication::processStart()
+{
+
+}
+
+void TApplication::processStop()
+{
+
 }

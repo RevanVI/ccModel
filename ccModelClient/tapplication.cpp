@@ -6,7 +6,8 @@ using namespace std;
 TApplication::TApplication(int argc, char **argv): QApplication (argc, argv)
 {
     interface.show();
-    socket.bind(6374);
+    socket.bind(22022);
+    QObject::connect(&socket, SIGNAL(readyRead()), this, SLOT(receiveData()));
     QObject::connect(&interface, SIGNAL(setBtnClicked()), this, SLOT(sendData()));
     QObject::connect(&interface, SIGNAL(startBtnClicked()), this, SLOT(sendData()));
     QObject::connect(&interface, SIGNAL(pauseBtnClicked()), this, SLOT(sendData()));
@@ -20,40 +21,62 @@ TApplication::~TApplication()
 
 void TApplication::sendData()
 {
-    QBitArray arr(4, false);
-    arr[0] = true;
+    int operation = 0;
     int* intData = interface.getData();
     QByteArray data;
     QDataStream str(&data, QIODevice::WriteOnly);
     str.setVersion(QDataStream::Qt_5_9);
-    str << arr;
+    str << operation;
     for (int i = 0; i < 3; ++i)
         str << intData[i];
     int bytes = socket.writeDatagram(data, QHostAddress::LocalHost, 6374);
+    delete[] intData;
 }
 
 void TApplication::receiveData()
 {
-    QBitArray arr(4, false);
-    int recData[3];
-    double avTime;
+    int operation;
+    QVector<double> averData;
+    QVector<int> taskDonePC;
+    QVector<int> taskCanceledPC;
+    int taskCanceled;
     while (socket.hasPendingDatagrams())
     {
+        averData.clear();
+        taskDonePC.clear();
+        taskCanceledPC.clear();
         QByteArray* data = new QByteArray();
         data->resize(socket.pendingDatagramSize());
         socket.readDatagram(data->data(), data->size());
 
         QDataStream str(data, QIODevice::ReadOnly);
         str.setVersion(QDataStream::Qt_5_9);
-        str >> arr;
-        for (int i = 0; i < 3; ++i)
-            str >> recData[i];
-        str >> avTime;
+        str >> operation;
+
+        if (operation == 0)
+        {
+            double buf;
+            for (int i = 0; i < 2; ++i)
+            {
+                str >> buf;
+                averData.push_back(buf);
+            }
+            int buf1;
+            for (int i = 0; i < 3; ++i)
+            {
+                str >> buf1;
+                taskDonePC.push_back(buf1);
+            }
+            for (int i = 0; i < 3; ++i)
+            {
+                str >> buf1;
+                taskCanceledPC.push_back(buf1);
+            }
+            str >> taskCanceled;
+        }
         data->clear();
         delete data;
     }
-    if (arr[0] == true)
-    {
-        interface.setStatData(recData, avTime);
-    }
+    if (operation == 0)
+        interface.setStatData(averData, taskDonePC, taskCanceledPC, taskCanceled);
 }

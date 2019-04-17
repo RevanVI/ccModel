@@ -13,19 +13,22 @@ private:
     int lastBreakTime; //time from last break in miliseconds;
     QTimer taskTimer;
     QTimer breakTimer;
+    double timeMult;
 public:
-    PC(int num = 0);
+    PC(int num = 0, double timeM = 500);
 
     bool setTask(int time);
     void setNum(int num);
     void setIntensity(int inten);
+    void setTimeMultiflier(double time);
     bool status() const;
     void changeTaskTime(int interval);
     void changeCheckBreakTime(int interval);
     void genBreakTime();
 signals:
-    void broken(int, double);
-    void taskEnded(int, int); //int1 - PC num, int2 = +1 if done, -1 if canceled
+    void broken(int pcNum, double time);
+    void taskEnded(int pcNum, int taskStatus);
+    void sendStatus(int pcNum, int status);
 private slots:
     void isBroken();
     void sendDoneTask();

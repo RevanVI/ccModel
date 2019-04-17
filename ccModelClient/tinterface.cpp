@@ -43,10 +43,16 @@ void TInterface::on_pauseBtn_clicked()
     emit pauseBtnClicked();
 }
 
-void TInterface::setStatData(int* taskCount, double avTime)
+void TInterface::setStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled)
 {
-    ui->taskDoneSBox->setValue(taskCount[0]);
-    ui->notRecTaskSBox->setValue(taskCount[1]);
-    ui->canceledTaskSBox->setValue(taskCount[2]);
-    ui->avTimeSBox->setValue(avTime);
+    int taskDone = 0;
+    int taskCanceledSum = 0;
+    for (int i = 0; i < taskDonePC.size(); ++i)
+        taskDone += taskDonePC[i];
+    for (int i = 0; i < taskCanceledPC.size(); ++i)
+        taskCanceledSum += taskCanceledPC[i];
+    ui->taskDoneSBox->setValue(taskDone);
+    ui->notRecTaskSBox->setValue(taskCanceled);
+    ui->canceledTaskSBox->setValue(taskCanceledSum);
+    ui->avTimeSBox->setValue(averData[0]);
 }
