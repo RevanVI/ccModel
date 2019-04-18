@@ -12,6 +12,14 @@ TInterface::TInterface(QWidget *parent) :
     ui->setupUi(this);
     this->setLayout(ui->mainLayt);
     ui->groupBox_2->setLayout(ui->horizontalLayout_3);
+
+    ui->groupBox_3->setLayout(ui->gridLayout);
+    statusLbl.push_back(ui->status0);
+    statusLbl.push_back(ui->status1);
+    statusLbl.push_back(ui->status2);
+    statusLbl.push_back(ui->status3);
+    statusLbl.push_back(ui->status4);
+
     maxVal = -1;
     for (int i = 0; i < 5; ++i)
     {
@@ -35,6 +43,7 @@ TInterface::TInterface(QWidget *parent) :
     axisY->append(categories);
     chart->setAxisY(axisY, series);
     QValueAxis *axisX = new QValueAxis();
+    axisX->setTickCount(6);
     chart->setAxisX(axisX, series);
     axisX->applyNiceNumbers();
 
@@ -73,6 +82,8 @@ void TInterface::on_setBtn_clicked()
 void TInterface::on_startBtn_clicked()
 {
     emit btnClicked(1);
+    for (int i = 0; i < 5; ++i)
+        setStatus(i, 0);
 }
 
 void TInterface::on_pauseBtn_clicked()
@@ -83,6 +94,8 @@ void TInterface::on_pauseBtn_clicked()
 void TInterface::on_stopBtn_clicked()
 {
     emit btnClicked(3);
+    for (int i = 0; i < 5; ++i)
+        setStatus(i, -2);
 }
 
 void TInterface::setStatData(QVector<double> averData)
@@ -122,30 +135,27 @@ void TInterface::setStatData(int pcNum, int count)
         ui->notRecTaskSBox->setValue(ui->notRecTaskSBox->value() + 1);
 }
 
-/*
-void TInterface::setStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled)
+void TInterface::setStatus(int pcNum, int status)
 {
-    int taskDone = 0;
-    int taskCanceledSum = 0;
-    int buf = 0;
-    for (int i = 0; i < taskDonePC.size(); ++i)
+    if (status == 0)
     {
-        taskDone += taskDonePC[i];
-        setPC[i]->replace(0, taskDonePC[i]);
-        if (buf < taskDonePC[i])
-            buf = taskDonePC[i];
+        statusLbl[pcNum]->setStyleSheet("color: rgb(0, 0, 0)");
+        statusLbl[pcNum]->setText("Waiting");
     }
-    for (int i = 0; i < taskCanceledPC.size(); ++i)
+    else if (status == 1)
     {
-        taskCanceledSum += taskCanceledPC[i];
-        setPC[i]->replace(1, taskCanceledPC[i]);
-        if (buf < taskCanceledPC[i])
-            buf = taskCanceledPC[i];
+        statusLbl[pcNum]->setStyleSheet("color: rgb(0, 0, 100)");
+        statusLbl[pcNum]->setText("Working");
     }
-    chartView->chart()->axisX()->setRange(0, buf + 5);
-    ui->taskDoneSBox->setValue(taskDone);
-    ui->notRecTaskSBox->setValue(taskCanceled);
-    ui->canceledTaskSBox->setValue(taskCanceledSum);
-    ui->avTimeSBox->setValue(averData[0]);
+    else if (status == -1)
+    {
+        statusLbl[pcNum]->setStyleSheet("color: rgb(100, 0, 0)");
+        statusLbl[pcNum]->setText("Broken");
+        QTimer::singleShot(400, this,[=](){ this->setStatus(pcNum, status + 1); });
+    }
+    else if (status == -2)
+    {
+        statusLbl[pcNum]->setStyleSheet("color: rgb(0, 0, 0)");
+        statusLbl[pcNum]->setText("off");
+    }
 }
-*/

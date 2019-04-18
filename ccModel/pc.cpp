@@ -74,10 +74,9 @@ void PC::isBroken()
         taskTimer.stop();
         working = false;
         emit taskEnded(pcNum, -1);
-        emit sendStatus(pcNum, -1);
-        //something here?
     }
     emit broken(pcNum, breakTimer.interval() / timeMult); //time in minutes
+    emit sendStatus(pcNum, -1);
     genBreakTime();
 }
 

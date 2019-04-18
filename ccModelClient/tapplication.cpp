@@ -62,16 +62,9 @@ void TApplication::receiveData()
             }
         }
         else if (operation == 9)
-        {
             str >> pcNum >> count;
-            qDebug() << "receive " << pcNum << " " << count << endl;
-        }
         else if (operation == 10) //status
-           for (int i = 0; i < 2; ++i)
-           {
-               int buf;
-               str >> buf;
-           }
+            str >> pcNum >> count;
         data->clear();
         delete data;
     }
@@ -79,6 +72,6 @@ void TApplication::receiveData()
         interface.setStatData(averData);
     else if (operation == 9)
         interface.setStatData(pcNum, count);
-    //if (operation == 10)
-            //interface.setStatus(taskDonePC);
+    else if (operation == 10)
+        interface.setStatus(pcNum, count);
 }

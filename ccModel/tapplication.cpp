@@ -19,7 +19,7 @@ TApplication::TApplication(int argc, char **argv): QApplication (argc, argv)
     //send block
     QObject::connect(&calc, SIGNAL(resendStat(QVector<double>)), this, SLOT(sendStatData(QVector<double>)));
     QObject::connect(&calc, SIGNAL(resendStat(int, int)), this, SLOT(sendStatData(int, int)));
-    //QObject::connect(&calc, SIGNAL(resendStatus(int, int)), this, SLOT(sendStatus(int, int)));
+    QObject::connect(&calc, SIGNAL(resendStatus(int, int)), this, SLOT(sendStatus(int, int)));
 }
 
 TApplication::~TApplication()
