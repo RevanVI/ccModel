@@ -86,6 +86,6 @@ void TApplication::receiveData()
     }
     if (operation == 0)
         interface.setStatData(averData, taskDonePC, taskCanceledPC, taskCanceled);
-    if (operation == 10)
-            interface.setStatus(taskDonePC);
+    //if (operation == 10)
+            //interface.setStatus(taskDonePC);
 }

@@ -2,6 +2,9 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
 
 namespace Ui {
 class TInterface;
@@ -24,7 +27,7 @@ public:
     int* getData();
 public slots:
     void setStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled);
-    void setStatus(QVector<int> data);
+    //void setStatus(QVector<int> data);
 signals:
     void btnClicked(int btnNum);
 };

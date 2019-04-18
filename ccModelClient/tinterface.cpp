@@ -1,12 +1,24 @@
 #include "tinterface.h"
 #include "ui_tinterface.h"
 
+QT_CHARTS_USE_NAMESPACE
+
 TInterface::TInterface(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TInterface)
 {
     ui->setupUi(this);
     this->setLayout(ui->mainLayt);
+    ui->groupBox_2->setLayout(ui->horizontalLayout_3);
+
+    QVector<QBarSet> set;
+    for (int i = 0; i < 5; ++i)
+    {
+        QBarSet buf("PC" + QString::number(i + 1));
+        set.push_back(buf);
+        for (int j = 0; j < 2; ++j)
+            set[i] << 0;
+    }
 }
 
 TInterface::~TInterface()
