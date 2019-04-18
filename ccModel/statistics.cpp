@@ -40,7 +40,7 @@ void Statistics::calc()
     averData[0] =(allTime / 60) / allCount;
     averData[1] = double(allCount) / cycleCount;
     emit sendLogData(averData);
-    emit sendData(averData, taskDonePC, taskCanceledPC, taskCanceled);
+    emit sendData(averData);
     time = 0;
     count = 0;
 }
@@ -53,5 +53,5 @@ void Statistics::receiveTaskInfo(int pcNum, int count)
         taskDonePC[pcNum] += count;
     else
         taskCanceledPC[pcNum] += -count;
-    emit sendData(averData, taskDonePC, taskCanceledPC, taskCanceled);
+    emit sendData(pcNum, count);
 }

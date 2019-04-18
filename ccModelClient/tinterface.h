@@ -2,9 +2,14 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QLayout>
 #include <QtCharts/QBarCategoryAxis>
 #include <QtCharts/QBarSeries>
 #include <QtCharts/QBarSet>
+#include <QtCharts/QHorizontalBarSeries>
+#include <QtCharts/QChart>
+#include <QtCharts/QValueAxis>
+#include <QtCharts/QChartView>
 
 namespace Ui {
 class TInterface;
@@ -15,6 +20,9 @@ class TInterface : public QWidget
     Q_OBJECT
 private:
     Ui::TInterface *ui;
+    QVector<QtCharts::QBarSet*> setPC;
+    QtCharts::QChartView* chartView;
+    int maxVal;
 private slots:
     void on_setBtn_clicked();
     void on_startBtn_clicked();
@@ -26,7 +34,8 @@ public:
 
     int* getData();
 public slots:
-    void setStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled);
+    void setStatData(QVector<double> averData);
+    void setStatData(int pcNum, int count);
     //void setStatus(QVector<int> data);
 signals:
     void btnClicked(int btnNum);

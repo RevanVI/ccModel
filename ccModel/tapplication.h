@@ -29,7 +29,8 @@ private slots:
     void printGenTaskInfo(double time);
     void printTaskConnection(int pcNum);
     void receiveData();
-    void sendStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled);
+    void sendStatData(QVector<double> averData);
+    void sendStatData(int pcNum, int count);
     void sendStatus(int pcNum, int status);
 };
 

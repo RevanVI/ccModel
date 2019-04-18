@@ -14,7 +14,8 @@ CalcCentre::CalcCentre(): QObject()
     cycleTimer.setInterval(30000);
     addTime = 0;
     QObject::connect(&cycleTimer, SIGNAL(timeout()), stat, SLOT(calc()));
-    QObject::connect(stat, SIGNAL(sendData(QVector<double>, QVector<int>, QVector<int>, int)), this, SLOT(getStat(QVector<double>, QVector<int>, QVector<int>, int)));
+    QObject::connect(stat, SIGNAL(sendData(QVector<double>)), this, SLOT(getStat(QVector<double>)));
+    QObject::connect(stat, SIGNAL(sendData(int, int)), this, SLOT(getStat(int, int)));
     QObject::connect(stat, SIGNAL(sendLogData(QVector<double>)), this, SLOT(getLogStat(QVector<double>)));
     QObject::connect(this, SIGNAL(taskEnded(int, int)), stat, SLOT(receiveTaskInfo(int, int)));
 }
@@ -33,9 +34,14 @@ void CalcCentre::getBreak(int pcNum, double breakTime)
     sTime.restart();
 }
 
-void CalcCentre::getStat(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled)
+void CalcCentre::getStat(QVector<double> averData)
 {
-    emit resendStat(averData, taskDonePC, taskCanceledPC, taskCanceled);
+    emit resendStat(averData);
+}
+
+void CalcCentre::getStat(int pcNum, int count)
+{
+    emit resendStat(pcNum, count);
 }
 
 void CalcCentre::getLogStat(QVector<double> averData)

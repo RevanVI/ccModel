@@ -31,7 +31,8 @@ public slots:
     void receiveTaskInfo(int, int);
 signals:
     void sendDataMain(QVector<int>, double);
-    void sendData(QVector<double>, QVector<int>, QVector<int>, int);
+    void sendData(int pcNum, int value); //detailed Stat data
+    void sendData(QVector<double>); // main Stat Data
     void sendLogData(QVector<double>);
 };
 

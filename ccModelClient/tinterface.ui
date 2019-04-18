@@ -30,7 +30,7 @@
     <rect>
      <x>0</x>
      <y>13</y>
-     <width>1021</width>
+     <width>1022</width>
      <height>751</height>
     </rect>
    </property>
@@ -89,6 +89,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>480</width>
+          <height>355</height>
+         </size>
         </property>
         <property name="font">
          <font>
@@ -259,6 +265,12 @@
       </item>
       <item>
        <widget class="QGroupBox" name="groupBox_3">
+        <property name="minimumSize">
+         <size>
+          <width>480</width>
+          <height>355</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <pointsize>9</pointsize>
@@ -320,16 +332,22 @@
           <rect>
            <x>9</x>
            <y>19</y>
-           <width>941</width>
+           <width>951</width>
            <height>321</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <property name="sizeConstraint">
-           <enum>QLayout::SetMaximumSize</enum>
+           <enum>QLayout::SetDefaultConstraint</enum>
           </property>
           <item>
            <widget class="QFrame" name="frame">
+            <property name="minimumSize">
+             <size>
+              <width>460</width>
+              <height>300</height>
+             </size>
+            </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
             </property>
@@ -477,14 +495,14 @@
            </widget>
           </item>
           <item>
-           <widget class="Line" name="line">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+           <widget class="QFrame" name="statWgt">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="statWgt" native="true"/>
           </item>
          </layout>
         </widget>

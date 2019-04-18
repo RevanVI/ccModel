@@ -25,14 +25,16 @@ public:
     void stop();
 public slots:
     void getBreak(int pcNum, double time);
-    void getStat(QVector<double>, QVector<int>, QVector<int>, int);
+    void getStat(QVector<double>);
+    void getStat(int pcNum, int count);
     void getLogStat(QVector<double> averData);
     void getTask(double time);//
     void getEndedTask(int pcNum, int taskStatus);
     void getStatus(int pcNum, int status);
 signals:
     void pcBroken(int pcNum, double time);
-    void resendStat(QVector<double>, QVector<int>, QVector<int>, int);
+    void resendStat(QVector<double>);
+    void resendStat(int, int);
     void resendLogStat(QVector<double> averData);
     void taskEnded(int pcNum, int taskStatus);
     void taskConnected(int pcNum);

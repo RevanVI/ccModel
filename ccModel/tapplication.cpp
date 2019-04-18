@@ -17,7 +17,8 @@ TApplication::TApplication(int argc, char **argv): QApplication (argc, argv)
     QObject::connect(&taskGen, SIGNAL(taskGenerated(double)), this, SLOT(printGenTaskInfo(double)));
 
     //send block
-    QObject::connect(&calc, SIGNAL(resendStat(QVector<double>, QVector<int>, QVector<int>, int)), this, SLOT(sendStatData(QVector<double>, QVector<int>, QVector<int>, int)));
+    QObject::connect(&calc, SIGNAL(resendStat(QVector<double>)), this, SLOT(sendStatData(QVector<double>)));
+    QObject::connect(&calc, SIGNAL(resendStat(int, int)), this, SLOT(sendStatData(int, int)));
     //QObject::connect(&calc, SIGNAL(resendStatus(int, int)), this, SLOT(sendStatus(int, int)));
 }
 
@@ -91,7 +92,7 @@ void TApplication::receiveData()
         processStop();
 }
 
-void TApplication::sendStatData(QVector<double> averData, QVector<int> taskDonePC, QVector<int> taskCanceledPC, int taskCanceled)
+void TApplication::sendStatData(QVector<double> averData)
 {
     int operation = 0;
     QByteArray data;
@@ -100,11 +101,17 @@ void TApplication::sendStatData(QVector<double> averData, QVector<int> taskDoneP
     str << operation;
     for (int i = 0; i < averData.size(); ++i)
         str << averData[i];
-    for (int i = 0; i < taskDonePC.size(); ++i)
-        str << taskDonePC[i];
-    for (int i = 0; i < taskCanceledPC.size(); ++i)
-        str << taskCanceledPC[i];
-    str << taskCanceled;
+    int bytes = socket.writeDatagram(data, QHostAddress::LocalHost, 22022);
+}
+
+void TApplication::sendStatData(int pcNum, int count)
+{
+    int operation = 9;
+    QByteArray data;
+    QDataStream str(&data, QIODevice::WriteOnly);
+    str.setVersion(QDataStream::Qt_5_9);
+    str << operation;
+    str << pcNum << count;
     int bytes = socket.writeDatagram(data, QHostAddress::LocalHost, 22022);
 }
 

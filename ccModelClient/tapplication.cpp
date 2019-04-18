@@ -37,14 +37,13 @@ void TApplication::receiveData()
 {
     int operation;
     QVector<double> averData;
-    QVector<int> taskDonePC;
-    QVector<int> taskCanceledPC;
-    int taskCanceled;
+    int pcNum = -2;
+    int count = 0;
     while (socket.hasPendingDatagrams())
     {
         averData.clear();
-        taskDonePC.clear();
-        taskCanceledPC.clear();
+        pcNum = -2;
+        count = 0;
         QByteArray* data = new QByteArray();
         data->resize(socket.pendingDatagramSize());
         socket.readDatagram(data->data(), data->size());
@@ -61,31 +60,25 @@ void TApplication::receiveData()
                 str >> buf;
                 averData.push_back(buf);
             }
-            int buf1;
-            for (int i = 0; i < 3; ++i)
-            {
-                str >> buf1;
-                taskDonePC.push_back(buf1);
-            }
-            for (int i = 0; i < 3; ++i)
-            {
-                str >> buf1;
-                taskCanceledPC.push_back(buf1);
-            }
-            str >> taskCanceled;
         }
-        else if (operation == 10)
+        else if (operation == 9)
+        {
+            str >> pcNum >> count;
+            qDebug() << "receive " << pcNum << " " << count << endl;
+        }
+        else if (operation == 10) //status
            for (int i = 0; i < 2; ++i)
            {
                int buf;
                str >> buf;
-               taskDonePC.push_back(buf);
            }
         data->clear();
         delete data;
     }
     if (operation == 0)
-        interface.setStatData(averData, taskDonePC, taskCanceledPC, taskCanceled);
+        interface.setStatData(averData);
+    else if (operation == 9)
+        interface.setStatData(pcNum, count);
     //if (operation == 10)
             //interface.setStatus(taskDonePC);
 }
