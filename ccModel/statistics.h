@@ -11,13 +11,13 @@ private:
 
     double time;
     int count;
-    double avTime;
 
     double allTime;
+    double allSqTime;
     int allCount;
     int cycleCount;
 
-    QVector<double> averData; //0 - allAvTime, 1 - allAvCount
+    QVector<double> averData; //0 - allAvTime, 1 - allAvCount, 2 - SDavTime
     QVector<int> taskDonePC;
     QVector<int> taskCanceledPC;
     int taskCanceled;

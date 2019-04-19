@@ -326,6 +326,11 @@
           </item>
           <item row="0" column="1">
            <widget class="QLabel" name="status0">
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>off</string>
             </property>
@@ -333,6 +338,11 @@
           </item>
           <item row="1" column="1">
            <widget class="QLabel" name="status1">
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>off</string>
             </property>
@@ -340,6 +350,11 @@
           </item>
           <item row="2" column="1">
            <widget class="QLabel" name="status2">
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>off</string>
             </property>
@@ -347,6 +362,11 @@
           </item>
           <item row="3" column="1">
            <widget class="QLabel" name="status3">
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>off</string>
             </property>
@@ -354,6 +374,11 @@
           </item>
           <item row="4" column="1">
            <widget class="QLabel" name="status4">
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>off</string>
             </property>
@@ -440,7 +465,7 @@
              <property name="geometry">
               <rect>
                <x>20</x>
-               <y>20</y>
+               <y>50</y>
                <width>131</width>
                <height>21</height>
               </rect>
@@ -453,7 +478,7 @@
              <property name="geometry">
               <rect>
                <x>40</x>
-               <y>50</y>
+               <y>80</y>
                <width>91</width>
                <height>16</height>
               </rect>
@@ -466,7 +491,7 @@
              <property name="geometry">
               <rect>
                <x>130</x>
-               <y>50</y>
+               <y>80</y>
                <width>42</width>
                <height>22</height>
               </rect>
@@ -485,7 +510,7 @@
              <property name="geometry">
               <rect>
                <x>40</x>
-               <y>80</y>
+               <y>110</y>
                <width>101</width>
                <height>16</height>
               </rect>
@@ -498,7 +523,7 @@
              <property name="geometry">
               <rect>
                <x>130</x>
-               <y>80</y>
+               <y>110</y>
                <width>42</width>
                <height>22</height>
               </rect>
@@ -517,7 +542,7 @@
              <property name="geometry">
               <rect>
                <x>40</x>
-               <y>110</y>
+               <y>140</y>
                <width>101</width>
                <height>16</height>
               </rect>
@@ -530,7 +555,7 @@
              <property name="geometry">
               <rect>
                <x>130</x>
-               <y>110</y>
+               <y>140</y>
                <width>42</width>
                <height>22</height>
               </rect>
@@ -549,7 +574,7 @@
              <property name="geometry">
               <rect>
                <x>20</x>
-               <y>150</y>
+               <y>180</y>
                <width>251</width>
                <height>16</height>
               </rect>
@@ -562,7 +587,7 @@
              <property name="geometry">
               <rect>
                <x>260</x>
-               <y>150</y>
+               <y>180</y>
                <width>62</width>
                <height>22</height>
               </rect>
@@ -572,6 +597,73 @@
              </property>
              <property name="buttonSymbols">
               <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_11">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>220</y>
+               <width>231</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>СКО длительности интервалов:</string>
+             </property>
+            </widget>
+            <widget class="QDoubleSpinBox" name="SDSBox">
+             <property name="geometry">
+              <rect>
+               <x>250</x>
+               <y>220</y>
+               <width>62</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_12">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>20</y>
+               <width>171</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Часов смоделировано:</string>
+             </property>
+            </widget>
+            <widget class="QSpinBox" name="cycleCount">
+             <property name="geometry">
+              <rect>
+               <x>190</x>
+               <y>20</y>
+               <width>42</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <number>1000</number>
              </property>
             </widget>
            </widget>

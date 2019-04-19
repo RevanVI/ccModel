@@ -4,16 +4,16 @@ Statistics::Statistics(int pcCount): QObject()
 {
     this->pcCount = pcCount;
     time = 0; 
-
     count = 0;
-    avTime = 0;
 
     cycleCount = 0;
     allCount = 0;
     allTime = 0;
+    allSqTime = 0;
 
     averData.push_back(0); //allAvTime = 0;
     averData.push_back(0); //allAvCount = 0;
+    averData.push_back(0); //SDavTime = 0;
 
     taskCanceled = 0;
     for (int i = 0; i < pcCount; ++i)
@@ -33,12 +33,13 @@ void Statistics::addData(double t, int c)
 void Statistics::calc()
 {
     ++cycleCount;
-    avTime = (time / 60) / count;
 
     allCount += count;
     allTime += time;
-    averData[0] =(allTime / 60) / allCount;
+    allSqTime += time * time;
+    averData[0] = allTime / allCount ; //
     averData[1] = double(allCount) / cycleCount;
+    averData[2] = sqrt((allSqTime / cycleCount) - averData[0]* averData[0]);
     emit sendLogData(averData);
     emit sendData(averData);
     time = 0;

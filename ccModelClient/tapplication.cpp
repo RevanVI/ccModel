@@ -6,7 +6,7 @@ using namespace std;
 TApplication::TApplication(int argc, char **argv): QApplication (argc, argv)
 {
     interface.show();
-    socket.bind(22022);
+    socket.bind(QHostAddress::LocalHost, 22022);
     QObject::connect(&socket, SIGNAL(readyRead()), this, SLOT(receiveData()));
     QObject::connect(&interface, SIGNAL(btnClicked(int)), this, SLOT(sendData(int)));
 }
@@ -46,7 +46,8 @@ void TApplication::receiveData()
         count = 0;
         QByteArray* data = new QByteArray();
         data->resize(socket.pendingDatagramSize());
-        socket.readDatagram(data->data(), data->size());
+        ushort* port = new ushort;
+        socket.readDatagram(data->data(), data->size(), nullptr, port);
 
         QDataStream str(data, QIODevice::ReadOnly);
         str.setVersion(QDataStream::Qt_5_9);
@@ -55,7 +56,7 @@ void TApplication::receiveData()
         if (operation == 0)
         {
             double buf;
-            for (int i = 0; i < 2; ++i)
+            for (int i = 0; i < 3; ++i)
             {
                 str >> buf;
                 averData.push_back(buf);

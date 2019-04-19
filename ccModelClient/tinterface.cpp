@@ -21,6 +21,7 @@ TInterface::TInterface(QWidget *parent) :
     statusLbl.push_back(ui->status4);
 
     maxVal = -1;
+    isStopped = false;
     for (int i = 0; i < 5; ++i)
     {
         QBarSet* buf = new QBarSet("PC" + QString::number(i + 1));
@@ -81,9 +82,25 @@ void TInterface::on_setBtn_clicked()
 
 void TInterface::on_startBtn_clicked()
 {
-    emit btnClicked(1);
     for (int i = 0; i < 5; ++i)
         setStatus(i, 0);
+    if (isStopped)
+    {
+        ui->cycleCount->setValue(0);
+        ui->taskDoneSBox->setValue(0);
+        ui->notRecTaskSBox->setValue(0);
+        ui->canceledTaskSBox->setValue(0);
+        ui->avTimeSBox->setValue(0);
+        ui->SDSBox->setValue(0);
+        for (int i = 0; i < 5; ++i)
+        {
+            setPC[i]->replace(0, 0);
+            setPC[i]->replace(1, 0);
+        }
+        chartView->chart()->axisX()->setRange(0, 0);
+        isStopped = false;
+    }
+    emit btnClicked(1);
 }
 
 void TInterface::on_pauseBtn_clicked()
@@ -96,16 +113,18 @@ void TInterface::on_stopBtn_clicked()
     emit btnClicked(3);
     for (int i = 0; i < 5; ++i)
         setStatus(i, -2);
+    isStopped = true;
 }
 
 void TInterface::setStatData(QVector<double> averData)
 {
     ui->avTimeSBox->setValue(averData[0]);
+    ui->SDSBox->setValue(averData[2]);
+    ui->cycleCount->setValue(ui->cycleCount->value() + 1);
 }
 
 void TInterface::setStatData(int pcNum, int count)
 {
-    qDebug() << "setData " << pcNum << " " << count << "\n";
     if (pcNum != -1)
     {
         if (count > 0)

@@ -34,7 +34,7 @@ void TApplication::printBreakInfo(int pcNum, double time)
 
 void TApplication::printLogStat(QVector<double> averData)
 {
-    cout << QTime::currentTime().toString().toStdString() << " allAvTime = " << averData[0] << "\tAvCount = " << averData[1] << "\n";
+    cout << QTime::currentTime().toString().toStdString() << " allAvTime = " << averData[0] << "\tSDAvTime = " << averData[2] << "\tAvCount = " << averData[1] << "\n";
 }
 
 void TApplication::printEndTaskInfo(int pcNum, int status)
