@@ -16,7 +16,6 @@ CalcCentre::CalcCentre(): QObject()
     QObject::connect(&cycleTimer, SIGNAL(timeout()), stat, SLOT(calc()));
     QObject::connect(stat, SIGNAL(sendData(QVector<double>)), this, SLOT(getStat(QVector<double>)));
     QObject::connect(stat, SIGNAL(sendData(int, int)), this, SLOT(getStat(int, int)));
-    QObject::connect(stat, SIGNAL(sendLogData(QVector<double>)), this, SLOT(getLogStat(QVector<double>)));
     QObject::connect(this, SIGNAL(taskEnded(int, int)), stat, SLOT(receiveTaskInfo(int, int)));
 }
 
@@ -42,11 +41,6 @@ void CalcCentre::getStat(QVector<double> averData)
 void CalcCentre::getStat(int pcNum, int count)
 {
     emit resendStat(pcNum, count);
-}
-
-void CalcCentre::getLogStat(QVector<double> averData)
-{
-    emit resendLogStat(averData);
 }
 
 void CalcCentre::getTask(double time)

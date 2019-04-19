@@ -11,7 +11,7 @@ TApplication::TApplication(int argc, char **argv): QApplication (argc, argv)
 
     //print block
     QObject::connect(&calc, SIGNAL(pcBroken(int, double)), this, SLOT(printBreakInfo(int, double)));
-    QObject::connect(&calc, SIGNAL(resendLogStat(QVector<double>)), this, SLOT(printLogStat(QVector<double>)));
+    QObject::connect(&calc, SIGNAL(resendStat(QVector<double>)), this, SLOT(printLogStat(QVector<double>)));
     QObject::connect(&calc, SIGNAL(taskEnded(int, int)), this, SLOT(printEndTaskInfo(int, int)));
     QObject::connect(&calc, SIGNAL(taskConnected(int)), this, SLOT(printTaskConnection(int)));
     QObject::connect(&taskGen, SIGNAL(taskGenerated(double)), this, SLOT(printGenTaskInfo(double)));

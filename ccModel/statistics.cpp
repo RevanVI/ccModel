@@ -40,7 +40,6 @@ void Statistics::calc()
     averData[0] = allTime / allCount ; //
     averData[1] = double(allCount) / cycleCount;
     averData[2] = sqrt((allSqTime / cycleCount) - averData[0]* averData[0]);
-    emit sendLogData(averData);
     emit sendData(averData);
     time = 0;
     count = 0;
