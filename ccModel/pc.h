@@ -10,7 +10,6 @@ private:
     int pcNum;
     int intensity;
     bool working;
-    int lastBreakTime; //time from last break in miliseconds;
     QTimer taskTimer;
     QTimer breakTimer;
     double timeMult;

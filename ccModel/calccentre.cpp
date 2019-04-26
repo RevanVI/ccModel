@@ -19,6 +19,11 @@ CalcCentre::CalcCentre(): QObject()
     QObject::connect(this, SIGNAL(taskEnded(int, int)), stat, SLOT(receiveTaskInfo(int, int)));
 }
 
+CalcCentre::~CalcCentre()
+{
+    delete stat;
+}
+
 void CalcCentre::setPCbreakIntensity(int inten)
 {
     for (int i = 0; i < pcCount; ++i)
@@ -89,4 +94,5 @@ void CalcCentre::stop()
     cycleTimer.setInterval(30000);
     for (int i = 0; i < pcCount; ++i)
         pcArr[i].stop();
+    stat->reset();
 }

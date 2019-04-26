@@ -91,6 +91,7 @@ void TInterface::on_startBtn_clicked()
         ui->notRecTaskSBox->setValue(0);
         ui->canceledTaskSBox->setValue(0);
         ui->avTimeSBox->setValue(0);
+        ui->avCountSBox->setValue(0);
         ui->SDSBox->setValue(0);
         for (int i = 0; i < 5; ++i)
         {
@@ -99,6 +100,7 @@ void TInterface::on_startBtn_clicked()
         }
         chartView->chart()->axisX()->setRange(0, 0);
         isStopped = false;
+        maxVal = -1;
     }
     emit btnClicked(1);
 }
@@ -119,6 +121,7 @@ void TInterface::on_stopBtn_clicked()
 void TInterface::setStatData(QVector<double> averData)
 {
     ui->avTimeSBox->setValue(averData[0]);
+    ui->avCountSBox->setValue(averData[1]);
     ui->SDSBox->setValue(averData[2]);
     ui->cycleCount->setValue(ui->cycleCount->value() + 1);
 }

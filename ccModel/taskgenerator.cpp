@@ -6,11 +6,11 @@ TaskGenerator::TaskGenerator(double timeM): QObject()
     intensity = 5;
     avTime = 5;
     timeMult = timeM;
-    genTaskTime();
+    genTime();
     QObject::connect(&taskTimer, SIGNAL(timeout()), this, SLOT(genTask()));
 }
 
-void TaskGenerator::genTaskTime()
+void TaskGenerator::genTime()
 {
     std::random_device rd;
     std::mt19937 generator(rd());
@@ -26,7 +26,7 @@ void TaskGenerator::genTask()
     std::uniform_real_distribution<double> distribution(0.0,1.0);
     double number = distribution(generator);
     emit taskGenerated(-log(number) * avTime); //in minutes
-    genTaskTime();
+    genTime();
 }
 
 void TaskGenerator::setIntensity(int inten)
@@ -52,5 +52,5 @@ void TaskGenerator::start()
 void TaskGenerator::stop()
 {
     taskTimer.stop();
-    genTaskTime();
+    genTime();
 }

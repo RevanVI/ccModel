@@ -85,14 +85,23 @@ void TApplication::receiveData()
         cout << "\nGet new values\n\n";
     }
     else if (operation == 1)
+    {
         processStart();
+        cout << "Start process\n";
+    }
     else if (operation == 2)
+    {
         processPause();
+        cout << "Pause process\n";
+    }
     else
+    {
         processStop();
+        cout << "Stop process";
+    }
 }
 
-void TApplication::sendStatData(QVector<double> averData)
+void TApplication::sendStatData(QVector<double> averData) //send data about main statistics
 {
     int operation = 0;
     QByteArray data;
@@ -104,7 +113,7 @@ void TApplication::sendStatData(QVector<double> averData)
     int bytes = socket.writeDatagram(data, QHostAddress::LocalHost, 22022);
 }
 
-void TApplication::sendStatData(int pcNum, int count)
+void TApplication::sendStatData(int pcNum, int count) //send data about additional statistics
 {
     int operation = 9;
     QByteArray data;
@@ -115,7 +124,7 @@ void TApplication::sendStatData(int pcNum, int count)
     int bytes = socket.writeDatagram(data, QHostAddress::LocalHost, 22022);
 }
 
-void TApplication::sendStatus(int pcNum, int status)
+void TApplication::sendStatus(int pcNum, int status) //send data about pc's status
 {
     int operation = 10;
     QByteArray data;

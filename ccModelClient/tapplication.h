@@ -13,10 +13,11 @@ class TApplication: public QApplication
     Q_OBJECT
 private:
     TInterface interface;
+    QUdpSocket socket;
 public:
     TApplication(int argc, char **argv);
     ~TApplication();
-    QUdpSocket socket;
+
 private slots:
     void sendData(int btnNum);
     void receiveData();

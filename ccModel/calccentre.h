@@ -9,7 +9,7 @@ class CalcCentre: public QObject
 {
     Q_OBJECT
 private:
-    static const int pcCount = 3;
+    static const int pcCount = 5;
     PC pcArr[pcCount];
     Statistics* stat;
     QTime sTime;
@@ -18,6 +18,7 @@ private:
     int addTime;
 public:
     CalcCentre();
+    ~CalcCentre();
     void setPCbreakIntensity(int inten);
 
     void start();

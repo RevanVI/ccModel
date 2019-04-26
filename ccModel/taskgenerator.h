@@ -17,7 +17,7 @@ private:
 public:
     TaskGenerator(double timeM = 500);
 
-    void genTaskTime();
+    void genTime();
     void setIntensity(int inten);
     void setAvTime(int time);
     void pause();

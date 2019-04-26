@@ -7,7 +7,6 @@ PC::PC(int num, double timeM): QObject()
     pcNum = num;
     intensity = 3; //in hour
     working = false;
-    lastBreakTime = 0;
     taskTimer.setInterval(0);
     timeMult = timeM;
 
@@ -68,7 +67,6 @@ void PC::genBreakTime()
 
 void PC::isBroken()
 {
-    lastBreakTime = 0;
     if (working)
     {
         taskTimer.stop();

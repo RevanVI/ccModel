@@ -10,6 +10,7 @@ private:
     int pcCount;
 
     double time;
+    double sqTime;
     int count;
 
     double allTime;
@@ -26,6 +27,7 @@ public:
 
     void addData(double t, int c);
     void prepareToSendMain();
+    void reset();
 public slots:
     void calc();
     void receiveTaskInfo(int, int);
